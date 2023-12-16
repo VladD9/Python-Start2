@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel, QLineEdit, QTextEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel, QLineEdit, QTextEdit, QListWidget
 app = QApplication([])
 window = QWidget()
 window.setWindowTitle('Розумні замітки')
@@ -13,7 +13,7 @@ notes1 = QLabel("Список заміток")
 notes2 = QLabel("Список тегів")
 
 lineV1 = QVBoxLayout()
-lineV1 = QVBoxLayout()
+lineV2 = QVBoxLayout()
 lineH1 = QHBoxLayout()
 lineH2 = QHBoxLayout()
 
@@ -47,7 +47,7 @@ lineV2.addWidget(but6)
 
 line_main.addLayout(lineV1, stretch=2)
 line_main.addLayout(lineV2, stretch=1)
-window.setLayot(line_main)
+window.setLayout(line_main)
 window.show()
 app.exec_()
 
