@@ -99,24 +99,66 @@ def del_note():
     else:
         print("Замітка для збереження не вибрана!")
 
+def add_tag():
+    if items1.selectedItems():
+        key = items1.selectedItems()[0].text()
+        tag = line.text()
+        if not tag in notes[key]["теги"]:
+            notes[key]["теги"].append(tag)
+            items2.addItem(tag)
+            line.clear()
+        with open("notes_data.json", "w") as file:
+            json.dump(notes, file, sort_keys=True, ensure_ascii=False)
+        print(notes)
+    else:
+        print("Замітки для додавання тега не обрана")
+
+def del_tag():
+    if items2.selectedItems():
+        key = items1.selectedItems()[0].text()
+        tag = items2.selectedItems()[0].text()
+        notes[key]["теги"].remove(tag)
+        items2.clear()
+        items2.addItems(notes[key]["теги"])
+        with open("notes_data.json", "w") as file:
+            json.dump(notes, file, sort_keys=True, ensure_ascii=False)
+    else:
+        print("Тег для вилучення не обраний!")
+
+def search_tag():
+    print(but6.text())
+    tag = line.text()
+    if but6.text() == "Шукати замітки за тегом" and tag:
+        print(tag)
+        notes_filtred = {}
+        for note in notes:
+            if tag in notes [note]["теги"]:
+                notes_filtred[note]=notes[note]
+        but6.setText("скинути пошук")
+        items1.clear
+        items2.clear
+        items1.addItems(notes_filtred)
+        print(but6.text())
+    elif but6.text() == "Скинути пошук":
+        line.clear()
+        items1.clear()
+        items2.clear()
+        items1.addItems(notes)
+        but6.setText("Шукати замітки по тегу")
+        print(but6.text())
+    else:
+        pass
+
 
 but1.clicked.connect(add_note)
 items1.itemClicked.connect(show_note)
 but3.clicked.connect(save_note)
 but2.clicked.connect(del_note)
+but4.clicked.connect(add_tag)
+but5.clicked.connect(del_tag)
+but6.clicked.connect(search_tag)
 window.show()
 with open("notes_data.json", "r") as file:
     notes = json.load(file)
 items1.addItems(notes)
 app.exec_()
-
-
-
-
-
-
-
-
-
-
-
