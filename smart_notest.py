@@ -144,7 +144,7 @@ def search_tag():
         items1.clear()
         items2.clear()
         items1.addItems(notes)
-        but6.setText("Шукати замітки по тегу")
+        but6.setText("Шукати замітки за тегом)
         print(but6.text())
     else:
         pass
