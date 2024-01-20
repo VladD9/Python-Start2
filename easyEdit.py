@@ -1,4 +1,6 @@
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
+from PIL import Image
 from PyQt5.QtWidgets import QApplication, QFileDialog, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QListWidget,QLabel, QLineEdit
 import os
 app = QApplication([])
@@ -62,7 +64,52 @@ def showFilenameList():
 
 but_dir.clicked.connect(showFilenameList)
 
+class ImageProcessor():
+    def __init__(self):
+        self.image = None
+        self.save_dir = None
+        self.filename = None
+        self.save_dir = "Modified/"
+    
+    def loadImage(self,dir,filename):
+        self.dir = dir
+        self.filename = filename
+        image_path = os.path.join(dir, filename)
+        self.image = Image.open(image_path)
+
+    def do_bw(self):
+        self.image = self.image.convert("L")
+        self.saveImage()
+        image_path = os.path.join(self.dir, self.filename, self.save_dir)
+
+    def saveImage(self):
+        path = os.path.join(self.dir, self.save_dir)
+        if not(os.path.exists(path) or os.path.isdir(path)):
+            os.mkdir(path)
+        image_path = os.path.join(path, self.filename)
+        self.image.save(image_path)
+
+    def showImage(self,path):
+        lb_img.hide()
+        pixmapimage = QPixmap(path)
+        w, h = lb_img.width(), lb_img.height()
+        pixmapimage = pixmapimage.scaled(w, h, Qt.KeepAspectRatio)
+        lb_img.setPixmap(pixmapimage)
+        lb_img.show()
+
+
+def showChosenImage():
+    if list_w.currentRow() >= 0:
+        filename = list_w.currentItem().text()
+        workimage.loadImage(workdir, filename)
+        image_path = os.path.join(workimage.dir, workimage.filename)
+        workimage.showImage(image_path)
+       
+list_w.currentRowChanged.connect(showChosenImage)
+workimage = ImageProcessor()
+
+but_bw.clicked.connect(workimage.do_bw)
+
 window.show()
 app.exec_()
-
 
