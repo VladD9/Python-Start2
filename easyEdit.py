@@ -1,8 +1,9 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
 from PIL import Image
+from PIL.ImageFilter import (SHARPEN)
 from PyQt5.QtWidgets import QApplication, QFileDialog, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QListWidget,QLabel, QLineEdit
 import os
+from PyQt5.QtGui import QPixmap
 app = QApplication([])
 window = QWidget()
 window.setWindowTitle('Калькулятор')
@@ -81,6 +82,31 @@ class ImageProcessor():
         self.image = self.image.convert("L")
         self.saveImage()
         image_path = os.path.join(self.dir, self.filename, self.save_dir)
+        self.showImage(image_path)
+
+    def do_left(self):
+        self.image = self.image.transpose(Image.ROTATE_90)
+        self.saveImage()
+        image_path = os.path.join(self.dir, self.filename, self.save_dir)
+        self.showImage(image_path)
+
+    def do_right(self):
+        self.image = self.image.transpose(Image.ROTATE_270)
+        self.saveImage()
+        image_path = os.path.join(self.dir, self.filename, self.save_dir)
+        self.showImage(image_path)
+
+    def do_mirow(self):
+        self.image = self.image.transpose(Image.FLIP_LEFT_RIGHT)
+        self.saveImage()
+        image_path = os.path.join(self.dir, self.filename, self.save_dir)
+        self.showImage(image_path)
+
+    def do_blure(self):
+        self.image = self.image.filter(SHARPEN)
+        self.saveImage()
+        image_path = os.path.join(self.dir, self.filename, self.save_dir)
+        self.showImage(image_path)
 
     def saveImage(self):
         path = os.path.join(self.dir, self.save_dir)
@@ -109,7 +135,10 @@ list_w.currentRowChanged.connect(showChosenImage)
 workimage = ImageProcessor()
 
 but_bw.clicked.connect(workimage.do_bw)
+but_left.clicked.connect(workimage.do_left)
+but_right.clicked.connect(workimage.do_right)
+but_mirow.clicked.connect(workimage.do_mirow)
+but_blur.clicked.connect(workimage.do_blure)
 
 window.show()
 app.exec_()
-
